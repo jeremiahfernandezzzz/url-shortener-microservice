@@ -4,7 +4,7 @@ var mongodb = require("mongodb")
 var MongoClient = mongodb.MongoClient
 var url = 'mongodb://jopet:jopet@ds237445.mlab.com:37445/url-shortener-microservice-db'
 
-app.get("/", function(req, res){
+app.get("/:qwe", function(req, res){
   //var path
   MongoClient.connect(url, function(err, db){
     if (err){
@@ -18,9 +18,13 @@ app.get("/", function(req, res){
         shortened: req.params.qwe
       })
       
-      //db.collection("urls").toArray(function(err, results) {
-      //  res.end(results)
-      //})
+      var path;
+      db.collection('paths', function(err, collection) {
+          collection.find({}).toArray(function(err, results) {
+              path = results;
+              console.log(results);
+          });
+      });
     }
   })
   
