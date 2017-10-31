@@ -10,11 +10,15 @@ app.get("/:qwe", function(req, res){
       console.log("did not connect to " + url)
     }
     if (db) {
+      var cunt
       db.collection("urls").insertOne({
         url: req.params.qwe,
         shortened: req.params.qwe
       })
-      res.end(db.collection("urls").count())
+      db.collection("urls", function(err, collection){
+        cunt = collection.count()
+      })
+      res.end(cunt)
     }
   })
 })
