@@ -2,7 +2,7 @@ var express = require("express")
 var app = express()
 var mongodb = require("mongodb")
 var MongoClient = mongodb.MongoClient
-var url = 'mongodb://jopet:jopet@ds237445.mlab.com:34745/url-shortener-microservice-db'
+var url = 'mongodb://jopet:jopet@ds237445.mlab.com:37445/url-shortener-microservice-db'
 
 app.get("/:qwe", function(req, res){
   //var path
@@ -21,7 +21,7 @@ app.get("/:qwe", function(req, res){
       db.collection("urls").count(function (err, count){
         acount = count
       })
-      res.end(acount)
+      console.log(acount)
     }
   })
   
