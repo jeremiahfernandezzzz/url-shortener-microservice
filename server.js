@@ -8,19 +8,19 @@ app.get("/", function(req, res){
   //var path
   MongoClient.connect(url, function(err, db){
     if (err){
-      console.log("did not connect to " + url)
+      res.end("did not connect to " + url)
     }
     if (db) {
+      res.end("connected to " + url)
       /*
       db.collection("urls").insertOne({
         url: req.params.qwe,
         shortened: req.params.qwe
       })
-      */
-      db.collection("urls").find({}).toArray(function(err, results) {
-        path = results
-        res.end(path.length)
+      db.collection("urls").find().toArray(function(err, results) {
+        res.end(results)
       })
+      */
     }
   })
   
