@@ -14,10 +14,9 @@ app.get("/:qwe", function(req, res){
         url: req.params.qwe,
         shortened: req.params.qwe
       })
+      res.end(db.collection("urls").count())
     }
   })
-  
-  res.end()
 })
 
 app.listen(process.env.PORT)
