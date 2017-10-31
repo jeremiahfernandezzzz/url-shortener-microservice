@@ -17,10 +17,10 @@ app.get("/", function(req, res){
         url: req.params.qwe,
         shortened: req.params.qwe
       })
-      db.collection("urls").find().toArray(function(err, results) {
+      */
+      db.collection("urls").toArray(function(err, results) {
         res.end(results)
       })
-      */
     }
   })
   
