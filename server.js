@@ -12,15 +12,15 @@ app.get("/", function(req, res){
     }
     if (db) {
       res.end("connected to " + url)
-      /*
+      
       db.collection("urls").insertOne({
         url: req.params.qwe,
         shortened: req.params.qwe
       })
-      */
-      db.collection("urls").toArray(function(err, results) {
-        res.end(results)
-      })
+      
+      //db.collection("urls").toArray(function(err, results) {
+      //  res.end(results)
+      //})
     }
   })
   
