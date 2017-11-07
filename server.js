@@ -12,16 +12,14 @@ app.get("/:qwe", function(req, res){
     }
     if (db) {
       //res.end("connected to " + url)
-      
-      db.collection("urls").insertOne({
-        url: req.params.qwe,
-        shortened: req.params.qwe
-      })
-      var acount
+      var newUrl = {}
       db.collection("urls").count(function (err, count){
-        acount = count
+         newUrl = {
+          url: req.params.qwe,
+          shortened: Number(count)
+        }
+        db.collection("urls").insertOne(newUrl)
       })
-      console.log(acount)
     }
   })
   
