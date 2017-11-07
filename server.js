@@ -12,7 +12,11 @@ app.get("/:qwe", function(req, res){
     }
     if (db) {
       //res.end("connected to " + url)
-      var newUrl = {}
+      var newUrl = {
+          url: req.params.qwe,
+          shortened: Number(count)
+      
+      }
       db.collection("urls").count(function (err, count){
          newUrl = {
           url: req.params.qwe,
@@ -20,6 +24,7 @@ app.get("/:qwe", function(req, res){
         }
         db.collection("urls").insertOne(newUrl)
       })
+      res.end(newUrl)
     }
   })
   
