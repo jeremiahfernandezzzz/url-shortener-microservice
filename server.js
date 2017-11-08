@@ -48,9 +48,11 @@ app.get("/new/:qwe", function(req, res){
       
      
       } else {
+        var match
         db.collection("urls").find({shortened: req.params.qwe}, function(err, doc){
-          res.send(JSON.stringify(doc))
+          match = doc
         })
+        res.send(match)
       }
     }
   })
