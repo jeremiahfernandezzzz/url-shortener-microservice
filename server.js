@@ -20,19 +20,19 @@ app.get("/new/*", function(req, res){
           longUrl = encodeURI(longUrl)
     
           var newUrl = {
-            url: "",
-            shortened: ""
+            original_url: "",
+            short_url: ""
           }
 
           db.collection("urls").count(function (err, count){
              newUrl = {
-              url: longUrl,
-              shortened: Number(count)
+              original_url: longUrl,
+              short_url: Number(count)
             }
 
             db.collection("urls").insertOne(newUrl)
         
-            db.collection("urls").find({shortened: Number(count)}, {_id: 0, url: 1, shortened: 1}).toArray(function(err, doc){
+            db.collection("urls").find({short_url: Number(count)}, {_id: 0, original_url: 1, short_url: 1}).toArray(function(err, doc){
               res.send(JSON.stringify(doc))
             })  
           })
@@ -42,12 +42,12 @@ app.get("/new/*", function(req, res){
 
       } else {
         var num = req.url.replace('/new/', '')
-        db.collection("urls").find({shortened: Number(num)}, {_id: 0, url: 1, shortened: 1}).toArray(function(err, doc){
+        db.collection("urls").find({short_url: Number(num)}, {_id: 0, original_url: 1, short_url: 1}).toArray(function(err, doc){
           if (err) {
             res.send("url not found")
           } else {
             if (doc[0]) {
-              res.redirect((doc[0]['url']))
+              res.redirect((doc[0]['original_url']))
             } else {
               res.send("url not found")
             }
