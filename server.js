@@ -5,6 +5,10 @@ var MongoClient = mongodb.MongoClient
 var url = 'mongodb://jopet:jopet@ds237445.mlab.com:37445/url-shortener-microservice-db'
 var validUrl = require('valid-url');
   
+
+app.get("/", function(req,res){
+  res.send("welcome to my 3rd fcc backend webdev certification basejump: url shortener microservice. </br> go to https://same-value.glitch.me/new/*your-url* to try the app")
+})
 app.get("/new/*", function(req, res){
   //var path
   MongoClient.connect(url, function(err, db){
@@ -27,12 +31,11 @@ app.get("/new/*", function(req, res){
           db.collection("urls").count(function (err, count){
              newUrl = {
               original_url: longUrl,
-              short_url: Number(count)
+              short_url: "https://same-value.glitch.me/" + Number(count)
             }
-
-            db.collection("urls").insertOne(newUrl)
+            
         
-            db.collection("urls").find({short_url: Number(count)}, {_id: 0, original_url: 1, short_url: 1}).toArray(function(err, doc){
+            db.collection("urls").find({original_url: longUrl}, {_id: 0, original_url: 1, short_url: 1}).toArray(function(err, doc){
               res.send(JSON.stringify(doc))
             })  
           })
