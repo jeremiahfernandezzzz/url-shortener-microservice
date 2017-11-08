@@ -4,6 +4,7 @@ var mongodb = require("mongodb")
 var MongoClient = mongodb.MongoClient
 var url = 'mongodb://jopet:jopet@ds237445.mlab.com:37445/url-shortener-microservice-db'
 
+
 app.get("/new/:qwe", function(req, res){
   //var path
   MongoClient.connect(url, function(err, db){
@@ -52,6 +53,7 @@ app.get("/new/:qwe", function(req, res){
             res.send("url not found")
           } else {
             res.send(JSON.stringify(doc))
+            //res.redirect()
           }
         })
       }
