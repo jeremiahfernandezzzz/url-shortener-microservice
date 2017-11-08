@@ -32,7 +32,7 @@ app.get("/new/*", function(req, res){
 
             db.collection("urls").insertOne(newUrl)
         
-            db.collection("urls").find({shortened: Number(num)}, {_id: 0, url: 1, shortened: 1}).toArray(function(err, doc){
+            db.collection("urls").find({shortened: Number(count)}, {_id: 0, url: 1, shortened: 1}).toArray(function(err, doc){
               res.send(JSON.stringify(doc))
             })  
           })
@@ -46,7 +46,11 @@ app.get("/new/*", function(req, res){
           if (err) {
             res.send("url not found")
           } else {
-            res.redirect((doc[0]['url']))
+            if (doc[0]) {
+              res.redirect((doc[0]['url']))
+            } else {
+              res.send("url not found")
+            }
           }
         })
       }
