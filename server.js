@@ -17,12 +17,13 @@ app.get("/:qwe", function(req, res){
           url: "",
           shortened: ""
       }
+      /*
       
       db.collection("urls").find({url: req.params.qwe}).toArray(function(err, doc){
         
         
       })
-      /*
+      */
       db.collection("urls").count(function (err, count){
          newUrl = {
           url: req.params.qwe,
@@ -33,7 +34,6 @@ app.get("/:qwe", function(req, res){
       db.collection("urls").insertOne(newUrl)
       
       res.send(JSON.stringify(newUrl))
-      */
     }
   })
   
