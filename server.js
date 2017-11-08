@@ -5,15 +5,14 @@ var MongoClient = mongodb.MongoClient
 var url = 'mongodb://jopet:jopet@ds237445.mlab.com:37445/url-shortener-microservice-db'
 
 
-app.get("/new/:qwe", function(req, res){
+app.get("/new/*", function(req, res){
   //var path
   MongoClient.connect(url, function(err, db){
     if (err){
       res.end("did not connect to " + url)
     }
     if (db) {
-      
-      var longUrl = req.params.qwe
+      var longUrl = req.url.replace('/new/', '')
       if(isNaN(longUrl)){
       //res.end("connected to " + url)
       function isURL(str) {
@@ -48,12 +47,14 @@ app.get("/new/:qwe", function(req, res){
           })
         }
       } else {
-        db.collection("urls").find({shortened: Number(req.params.qwe)}, {_id: 0, url: 1, shortened: 1}).toArray(function(err, doc){
+        var num = req.url.replace('/new/', '')
+        
+        db.collection("urls").find({shortened: Number(num)}, {_id: 0, url: 1, shortened: 1}).toArray(function(err, doc){
           if (err) {
             res.send("url not found")
           } else {
-            res.send(JSON.stringify(doc))
-            //res.redirect()
+            //res.send(JSON.stringify(doc))
+            res.redirect(JSON.stringify(doc[url]))
           }
         })
       }
