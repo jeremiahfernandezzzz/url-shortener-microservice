@@ -13,12 +13,11 @@ app.get("/:qwe", function(req, res){
     if (db) {
       //res.end("connected to " + url)
       
+      var longUrl = req.params.qwe
+      
       var newUrl = {
-          url: req.params.qwe,
-          shortened: db.collection("urls").count(function (err, count){
-             return count
-          })
-        }
+          url: "",
+          shortened: ""
       }
       /*
       
@@ -27,14 +26,19 @@ app.get("/:qwe", function(req, res){
         
       })
       */
-      //db.collection("urls").count(function (err, count){
-         
-      //})
+      db.collection("urls").count(function (err, count){
+         newUrl = {
+          url: longUrl,
+          shortened: Number(count)
+        }
+        
+        db.collection("urls").insertOne(newUrl)
+
+        res.send(JSON.stringify(newUrl))
+      })
       
-      db.collection("urls").insertOne(newUrl)
-      
-      res.send(JSON.stringify(newUrl))
-    })
+    }
+  })
   
 })
 
