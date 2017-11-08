@@ -25,7 +25,7 @@ app.get("/new/*", function(req, res){
         return pattern.test(str);
       }  
 
-        if (isURL(req.params.qwe)) {
+        if (!isURL(longUrl)) {
           res.send("invalid url")
         } else { 
           longUrl = encodeURI(longUrl)
@@ -53,8 +53,7 @@ app.get("/new/*", function(req, res){
           if (err) {
             res.send("url not found")
           } else {
-            //res.send(JSON.stringify(doc))
-            res.redirect(JSON.stringify(doc[url]))
+            res.send(JSON.stringify(doc['url']))
           }
         })
       }
