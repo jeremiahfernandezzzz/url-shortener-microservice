@@ -14,8 +14,11 @@ app.get("/:qwe", function(req, res){
       //res.end("connected to " + url)
       
       var newUrl = {
-          url: "",
-          shortened: ""
+          url: req.params.qwe,
+          shortened: db.collection("urls").count(function (err, count){
+             return count
+          })
+        }
       }
       /*
       
@@ -24,18 +27,14 @@ app.get("/:qwe", function(req, res){
         
       })
       */
-      db.collection("urls").count(function (err, count){
-         newUrl = {
-          url: req.params.qwe,
-          shortened: Number(count)
-        }
-      })
+      //db.collection("urls").count(function (err, count){
+         
+      //})
       
       db.collection("urls").insertOne(newUrl)
       
       res.send(JSON.stringify(newUrl))
-    }
-  })
+    })
   
 })
 
