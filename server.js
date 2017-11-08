@@ -12,24 +12,26 @@ app.get("/", function(req,res){
 
 app.get("/*", function(req, res){
   var num = req.url.replace('/', '')
-  MongoClient.connect(url, function(err, db){
-    if (db){
-      db.collection("urls").find({short_url: Number(num)}, {_id: 0, original_url: 1, short_url: 1}).toArray(function(err, doc){
-        if (err) {
-          res.send("err")
-        } else {
-          if (doc[0]) {
-            res.redirect((doc[0]['original_url']))
+  if(!isNaN(num)){
+    MongoClient.connect(url, function(err, db){
+      if (db){
+        db.collection("urls").find({short_url: Number(num)}, {_id: 0, original_url: 1, short_url: 1}).toArray(function(err, doc){
+          if (err) {
+            res.send("err")
           } else {
-            res.send("url not found")
+            if (doc[0]) {
+              res.redirect((doc[0]['original_url']))
+            } else {
+              res.send("url not found")
+            }
           }
-        }
-      })
-    }
-    if (err) {
-      res.end("did not connect to " + url)
-    }
-  })
+        })
+      }
+      if (err) {
+        res.end("did not connect to " + url)
+      }
+    })
+  }
 })
 
 app.get("/new/*", function(req, res){
@@ -42,34 +44,32 @@ app.get("/new/*", function(req, res){
       var longUrl = req.url.replace('/new/', '')
       if(isNaN(longUrl)){
       //res.end("connected to " + url)
-  
-    if (validUrl.isUri(longUrl)){
-          longUrl = encodeURI(longUrl)
-    
-          var newUrl = {
-            original_url: "",
-            short_url: ""
-          }
+        if (validUrl.isUri(longUrl)){
+              longUrl = encodeURI(longUrl)
 
-          db.collection("urls").count(function (err, count){
-             newUrl = {
-              original_url: longUrl,
-              short_url: Number(count)
-            }
-        
-            db.collection("urls").find({original_url: longUrl}, {_id: 0, original_url: 1, short_url: 1}).toArray(function(err, doc){
-              if (doc[0]){
-                res.send(JSON.stringify(doc))
-              } else {
-                db.collection("urls").insertOne(newUrl)
-                res.send(JSON.stringify(doc))
+              var newUrl = {
+                original_url: "",
+                short_url: ""
               }
-            })  
-          })
-    } else {
-          res.send("invalid url")
-    }
 
+              db.collection("urls").count(function (err, count){
+                 newUrl = {
+                  original_url: longUrl,
+                  short_url: Number(count)
+                }
+
+                db.collection("urls").find({original_url: longUrl}, {_id: 0, original_url: 1, short_url: 1}).toArray(function(err, doc){
+                  if (doc[0]){
+                    res.send(JSON.stringify(doc))
+                  } else {
+                    db.collection("urls").insertOne(newUrl)
+                    res.send(JSON.stringify(doc))
+                  }
+                })  
+              })
+        } else {
+              res.send("invalid url")
+        }
       } else {
           res.send("invalid url")
       }
