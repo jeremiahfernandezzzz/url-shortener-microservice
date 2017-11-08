@@ -16,7 +16,7 @@ app.get("/*", function(req, res){
     if (db){
       db.collection("urls").find({short_url: Number(num)}, {_id: 0, original_url: 1, short_url: 1}).toArray(function(err, doc){
         if (err) {
-          res.send("url not found")
+          res.send("err")
         } else {
           if (doc[0]) {
             res.redirect((doc[0]['original_url']))
@@ -29,7 +29,7 @@ app.get("/*", function(req, res){
     if (err) {
       res.end("did not connect to " + url)
     }
-  }
+  })
 })
 
 app.get("/new/*", function(req, res){
@@ -54,7 +54,7 @@ app.get("/new/*", function(req, res){
           db.collection("urls").count(function (err, count){
              newUrl = {
               original_url: longUrl,
-              short_url: "https://same-value.glitch.me/" + Number(count)
+              short_url: Number(count)
             }
         
             db.collection("urls").find({original_url: longUrl}, {_id: 0, original_url: 1, short_url: 1}).toArray(function(err, doc){
