@@ -25,7 +25,7 @@ app.get("/new/*", function(req, res){
         return pattern.test(str);
       }  
 
-        if (!isURL(longUrl)) {
+        if (isURL(longUrl)) {
           res.send("invalid url")
         } else { 
           longUrl = encodeURI(longUrl)
@@ -48,12 +48,11 @@ app.get("/new/*", function(req, res){
         }
       } else {
         var num = req.url.replace('/new/', '')
-        
         db.collection("urls").find({shortened: Number(num)}, {_id: 0, url: 1, shortened: 1}).toArray(function(err, doc){
           if (err) {
             res.send("url not found")
           } else {
-            res.send(JSON.stringify(doc['url']))
+            res.redirect((doc[0]['url']))
           }
         })
       }
