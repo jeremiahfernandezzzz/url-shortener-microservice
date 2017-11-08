@@ -3,8 +3,8 @@ var app = express()
 var mongodb = require("mongodb")
 var MongoClient = mongodb.MongoClient
 var url = 'mongodb://jopet:jopet@ds237445.mlab.com:37445/url-shortener-microservice-db'
-
-
+var validUrl = require('valid-url');
+  
 app.get("/new/*", function(req, res){
   //var path
   MongoClient.connect(url, function(err, db){
@@ -15,19 +15,8 @@ app.get("/new/*", function(req, res){
       var longUrl = req.url.replace('/new/', '')
       if(isNaN(longUrl)){
       //res.end("connected to " + url)
-      function isURL(str) {
-        var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-        '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-        return pattern.test(str);
-      }  
-
-        if (isURL(longUrl)) {
-          res.send("invalid url")
-        } else { 
+  
+    if (validUrl.isUri(longUrl)){
           longUrl = encodeURI(longUrl)
     
           var newUrl = {
@@ -42,10 +31,15 @@ app.get("/new/*", function(req, res){
             }
 
             db.collection("urls").insertOne(newUrl)
-
-            res.send(JSON.stringify(newUrl))
+        
+            db.collection("urls").find({shortened: Number(num)}, {_id: 0, url: 1, shortened: 1}).toArray(function(err, doc){
+              res.send(JSON.stringify(doc))
+            })  
           })
-        }
+    } else {
+          res.send("invalid url")
+    }
+
       } else {
         var num = req.url.replace('/new/', '')
         db.collection("urls").find({shortened: Number(num)}, {_id: 0, url: 1, shortened: 1}).toArray(function(err, doc){
