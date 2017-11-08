@@ -22,7 +22,7 @@ app.get("/:shortened", function(req, res){
             if (doc[0]) {
               res.redirect((doc[0]['original_url']))
             } else {
-              res.send("url not found")
+              res.send({error: "url not found"})
             }
           }
         })
@@ -61,20 +61,20 @@ app.get("/new/*", function(req, res){
 
                 db.collection("urls").find({original_url: longUrl}, {_id: 0, original_url: 1, short_url: 1}).toArray(function(err, doc){
                   if (doc[0]){
-                    res.send(JSON.stringify(doc))
+                    res.send(doc)
                   } else {
                     db.collection("urls").insertOne(newUrl)
                     db.collection("urls").find({original_url: longUrl}, {_id: 0, original_url: 1, short_url: 1}).toArray(function(err, doc){
-                      res.send(JSON.stringify(doc))
-                    }
+                      res.send(doc)
+                    })
                   }
                 })  
               })
         } else {
-              res.send("invalid url")
+              res.send({error: "invalid url"})
         }
       } else {
-          res.send("invalid url")
+          res.send({error: "invalid url"})
       }
     }
   })
