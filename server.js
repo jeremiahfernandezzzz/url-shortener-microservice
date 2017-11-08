@@ -32,51 +32,7 @@ app.get("/*", function(req, res){
       }
     })
   }
-  /*
-  app.get("/new/*", function(req, res){
-  //var path
-    MongoClient.connect(url, function(err, db){
-      if (err){
-        res.end("did not connect to " + url)
-      }
-      if (db) {
-        var longUrl = req.url.replace('/new/', '')
-        if(isNaN(longUrl)){
-        //res.end("connected to " + url)
-          if (validUrl.isUri(longUrl)){
-                longUrl = encodeURI(longUrl)
-
-                var newUrl = {
-                  original_url: "",
-                  short_url: ""
-                }
-
-                db.collection("urls").count(function (err, count){
-                   newUrl = {
-                    original_url: longUrl,
-                    short_url: Number(count)
-                  }
-
-                  db.collection("urls").find({original_url: longUrl}, {_id: 0, original_url: 1, short_url: 1}).toArray(function(err, doc){
-                    if (doc[0]){
-                      res.send(JSON.stringify(doc))
-                    } else {
-                      db.collection("urls").insertOne(newUrl)
-                      res.send(JSON.stringify(doc))
-                    }
-                  })  
-                })
-          } else {
-                res.send("invalid url")
-          }
-        } else {
-            res.send("invalid url")
-        }
-      }
-    })
-  */
-  })
-
+  
 })
 
 
