@@ -11,7 +11,9 @@ app.get("/new/:qwe", function(req, res){
       res.end("did not connect to " + url)
     }
     if (db) {
-      if(isNaN(req.params.qwe)){
+      
+      var longUrl = req.params.qwe
+      if(isNaN(longUrl)){
       //res.end("connected to " + url)
       function isURL(str) {
         var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
@@ -22,31 +24,28 @@ app.get("/new/:qwe", function(req, res){
         '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
         return pattern.test(str);
       }  
-      
-      if (isURL(req.params.qwe)) {
-        res.send("invalid url")
-      } else { 
-        
-        var longUrl = req.params.qwe
-        
-        var newUrl = {
-          url: "",
-          shortened: ""
-        }
-        
-        db.collection("urls").count(function (err, count){
-           newUrl = {
-            url: longUrl,
-            shortened: Number(count)
+
+        if (isURL(req.params.qwe)) {
+          res.send("invalid url")
+        } else { 
+          longUrl = encodeURI(longUrl)
+    
+          var newUrl = {
+            url: "",
+            shortened: ""
           }
 
-          db.collection("urls").insertOne(newUrl)
+          db.collection("urls").count(function (err, count){
+             newUrl = {
+              url: longUrl,
+              shortened: Number(count)
+            }
 
-          res.send(JSON.stringify(newUrl))
-        })
-      }
-      
-     
+            db.collection("urls").insertOne(newUrl)
+
+            res.send(JSON.stringify(newUrl))
+          })
+        }
       } else {
         db.collection("urls").find({shortened: Number(req.params.qwe)}, {_id: 0, url: 1, shortened: 1}).toArray(function(err, doc){
           if (err) {
